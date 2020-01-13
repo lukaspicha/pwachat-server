@@ -44,18 +44,18 @@ router.get('/:sender_id/:receiver_id/', (req, res) => {
     const populate = [
         { 
             path: 'sender',
-            model: User,
+            model: models.User,
             populate: {
                 path: 'avatar',
-                model: Avatar
+                model: models.Avatar
             }
         },
         { 
             path: 'receiver',
-            model: User,
+            model: models.User,
             populate: {
                 path: 'avatar',
-                model: Avatar
+                model: models.Avatar
             }
         }
     ];
