@@ -3,6 +3,8 @@ const router = require('express').Router();
 
 const models = require('../models/models.js');
 
+const server = require('../server.js'); 
+
 router.get('/:id?', (req, res) => {
     if(req.params.id) {
 
@@ -17,25 +19,28 @@ router.get('/:id?', (req, res) => {
 });
 
 
+router.put('/:id', async function(req, res) {
+
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.json({message: 'Invalid user id.', data: {}}).status(400);
+        }
+
+        models.User.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}).populate({path: 'avatar', model: models.Avatar}).exec(function(err, user) {
+            if (err) { 
+                return res.status(500).json({ data: err }); 
+            }
+            if (!user) { 
+                return res.status(404).json({ message: 'Invalid user id.' }); 
+            }
+            server.broadcast('#UPDATE-USERS', '#ALL', []);
+            return res.json(user).status(200);
+        });
+    });
+
+
 module.exports = router;
 
     
 
-    // app.put('/v1/users/:id', async function(req, res) {
-
-    //     if(!mongoose.Types.ObjectId.isValid(req.body.id)) {
-    //         return res.json({message: 'Bad user id.', data: {}}).status(400);
-    //     }
-
-    //     User.findOneAndUpdate({_id: req.params.id}, req.body, {new: true}, function(err, user) {
-    //         if (err) { 
-    //             return res.status(500).json({ data: err }); 
-    //         }
-    //         if (!user) { 
-    //             return res.status(404).json({ message: 'Invalid user id.' }); 
-    //         }
-    //         broadcast('#UPDATE-USERS', '#ALL', []);
-    //         return res.json(user).status(200);
-    //     });
-    // });
+    
 
