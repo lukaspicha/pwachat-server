@@ -12,7 +12,7 @@ router.get('/:id?', (req, res) => {
             return res.json({message: 'Invalid user id.', data: {}}).status(404);
         }
 
-        models.User.findOne({_id: params.id}).populate('avatar').then(response => res.status(200).json(response)).catch(error => console.error(error));
+        models.User.findOne({_id: req.params.id}).populate('avatar').then(response => res.status(200).json(response)).catch(error => console.error(error));
     } else {
         models.User.find({}).populate('avatar').then(response => res.status(200).json(response)).catch(error => console.error(error));
     }
