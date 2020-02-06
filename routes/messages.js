@@ -3,6 +3,8 @@ const router = require('express').Router();
 
 const models = require('../models/models.js');
 
+const server = require('../server.js'); 
+
 router.post('/', (req, res) => {
 
     const newMessage = new models.Message({
@@ -16,7 +18,12 @@ router.post('/', (req, res) => {
         res.status(201).json({
             message: 'Message has been sended.'
         });
-        broadcast('#NEW-MESSAGE', req.body.receiver_id, {
+        server.broadcast('#NEW-MESSAGE', req.body.receiver_id, {
+            //sender: req.params.id,
+            sender: req.body.sender_id,
+        });
+
+        server.broadcast('#NEW-MESSAGE', req.body.sender_id, {
             //sender: req.params.id,
             sender: req.body.receiver_id,
         });
