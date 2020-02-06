@@ -66,7 +66,7 @@ router.get('/:sender_id/:receiver_id/', (req, res) => {
             }
         }
     ];
-    models.Message.find(query).populate(populate).sort({created: 1}).then(response => res.status(200).json(response)).catch(error => console.error(error));
+    models.Message.find(query).populate(populate).sort({created: -1}).then(response => res.status(200).json(response)).catch(error => console.error(error));
 });
 
 module.exports = router;
